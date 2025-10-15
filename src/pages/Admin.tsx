@@ -17,6 +17,7 @@ const Admin = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState<string[]>(["", ""]);
+  const [pollImage, setPollImage] = useState<string>("");
 
   useEffect(() => {
     loadPollData();
@@ -75,6 +76,7 @@ const Admin = () => {
       id: crypto.randomUUID(),
       question: question.trim(),
       options: validOptions,
+      image: pollImage || undefined,
       createdAt: new Date().toISOString()
     };
 
@@ -82,6 +84,7 @@ const Admin = () => {
     setShowCreateForm(false);
     setQuestion("");
     setOptions(["", ""]);
+    setPollImage("");
     toast.success("Poll created successfully!");
     loadPollData();
   };
@@ -110,6 +113,17 @@ const Admin = () => {
     const newOptions = [...options];
     newOptions[index] = value;
     setOptions(newOptions);
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPollImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   if (loading) {
@@ -147,6 +161,19 @@ const Admin = () => {
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="image">Poll Image (Optional)</Label>
+                <Input
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+                {pollImage && (
+                  <img src={pollImage} alt="Preview" className="w-32 h-32 object-cover rounded-md" />
+                )}
               </div>
 
               <div className="space-y-4">

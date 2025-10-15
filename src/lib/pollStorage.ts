@@ -2,6 +2,7 @@ export interface Poll {
   id: string;
   question: string;
   options: string[];
+  image?: string; // base64 image data
   createdAt: string;
 }
 
