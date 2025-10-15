@@ -99,6 +99,14 @@ const Admin = () => {
     }
   };
 
+  const handleClearVotes = () => {
+    if (confirm("Are you sure you want to clear all votes?")) {
+      pollStorage.clearVotes();
+      toast.success("All votes cleared");
+      loadPollData();
+    }
+  };
+
   const addOption = () => {
     setOptions([...options, ""]);
   };
@@ -212,6 +220,10 @@ const Admin = () => {
             <div className="flex justify-end mb-4 gap-2">
               <Button variant="outline" onClick={() => setShowCreateForm(true)}>
                 Create New Poll
+              </Button>
+              <Button variant="outline" onClick={handleClearVotes}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Clear All Votes
               </Button>
               <Button variant="destructive" onClick={handleClearAll}>
                 <Trash2 className="h-4 w-4 mr-2" />
